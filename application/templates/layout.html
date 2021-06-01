@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+    
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        {% block head %}
+        {% endblock %}
+    </head>
+
+    <body>
+        <div class="container">
+            {% include "includes/nav.html" %}
+
+            {% block body %}
+            {% endblock %}
+        </div>
+    </body>
+
+    <footer>
+        {% block footer %}
+        {% endblock %}
+    </footer>
+
+</html>

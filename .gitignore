@@ -1,0 +1,11 @@
+# Directories
+__pycache__/
+
+
+# env files
+.flaskenv
+.env
+
+
+# py files
+config.py
