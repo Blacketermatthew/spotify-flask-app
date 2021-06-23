@@ -2,7 +2,6 @@
 
 
 html, body {
-
     font-family: Arial, Helvetica, sans-serif;
     background-color: coral;
     position: relative;
@@ -14,11 +13,13 @@ header {
     text-align: center;
 }
 
+
 .navbar {
     overflow: hidden;
     background-color: #323135;
 }
 
+/* --- Nav Bar --- */
 .navbar a {
     color: #f0f0f0;
     text-decoration: none;
@@ -37,6 +38,8 @@ header {
     background-color: #178601;
 }
 
+/* --- Main Text --- */
+
 h1.maintext {
     text-align: center;
     font-size: 75px;
@@ -44,6 +47,9 @@ h1.maintext {
     color: #b2ff24;
     text-shadow: 1px 1px 3px #235291;
 }
+
+
+/* --- Track Database Table --- */
 
 table, th, td {
     border: 1px solid black;
@@ -61,19 +67,18 @@ table {
     margin-left: auto;
     margin-right: auto;
   }
-
-tr.head-row th {
+  
+.head-row th {
     background-color: #18204b;
     color: white;
     padding: 5px 0px;
     font-size: 25px;
     text-shadow: 3px 3px 3px #0b4d21;
-
+    top: 0;
+    position: sticky;
 }
 
-td {
-    padding: 10px 10px;
-}
+
 
 tr:hover {
     background-color: #e2f882;
@@ -82,9 +87,6 @@ tr:hover {
     cursor: pointer;
   }
 
-th {
-    background-color: #18204b;
-    position: sticky;
-    top: 0;
+  td {
+    padding: 10px 10px;
 }
-  

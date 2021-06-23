@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 
+
 {% block head %}
 
     <title>Spotify Missed Connections</title>
@@ -9,10 +10,15 @@
 
 {% block body %}
 
+<script type=text/javascript src="{{
+    url_for('static', filename='jquery.js') }}"></script>
+
+<!-- Main Text-->
 <h1 class="maintext">Here are some songs you might've missed:</h1>
 
 <div class="db-list">
     <table>
+
         <thead>
             <tr class="head-row">
                 <th>Artist</th>
@@ -21,34 +27,39 @@
             </tr>
         </thead>
 
-        {% for track in total_tracks %}
-        <!-- Spotify URL -->
+        <tbody>
 
-            <tr>
-                <a href={{ track[4] }}>
-                <td>
-                    <!-- Artist -->
-                    {{ track[0] }}
-                </td>
+            {% for track in total_tracks %}
 
-                <td>
-                    <!-- title -->
-                    {{ track[1] }}
-                </td>
+                <tr class="clickable-row" onclick="openInNewTab('{{ track[4] }}');">  
+                <script>
+                    function openInNewTab(url) {
+                        var win = window.open(url, '_blank');
+                        win.focus();
+                    }
+                </script>
 
-                <td>
-                    <!-- Album -->
-                    {{ track[2] }}
-                </td>
-                </a>
-            </tr>
-        
-        
-        {% endfor %}
+                    <td>
+                        <!-- Artist -->
+                        {{ track[0] }}
+                    </td>
+                    <td>
+                        <!-- title -->
+                        {{ track[1] }}
+                    </td>
+                    <td>
+                        <!-- Album -->
+                        {{ track[2] }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
 
     </table>
 </div>
-
 
 
 {% endblock %}
