@@ -32,16 +32,6 @@ party_playlist_uri = os.getenv("PARTY_PLAYLIST")
 username = "1242575449"  # My Spotify "username"
 redirecturi='http://127.0.0.1:9090'  # Spotify requires you to create a redirect_uri.  For now, it's localhost
 
-
-# Scope required to access my private playlist Discover Weekly
-scope = "playlist-read-private"
-sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=client_id, client_secret=client_secret))
-
-
-results = sp.user_playlist_tracks(user=username, playlist_id=discover_playlist_uri, fields='items, name')
-tracks = results['items']
-
-
 load_dotenv()
 db_username = os.getenv("PSQL_USERNAME")
 db_password = os.getenv("PSQL_PASSWORD")
@@ -53,33 +43,44 @@ db = psycopg2.connect(
     host = "localhost",
     port = "5432")
 
+# Scope required to access my private playlist Discover Weekly
+playlist_scope = "playlist-read-private"
+sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=client_id, client_secret=client_secret))
+playlist_results = sp.user_playlist_tracks(user=username, playlist_id=discover_playlist_uri, fields='items, name')
+tracks = playlist_results['items']
 
-def insert_tracks(database, artist, title, album, URI, URL):
-    track_data = (artist, title, album, URI, URL)
-    cursor = database.cursor()
+
+
+        # print(tracks[i]['track']['artists'][0]['name'], '-',    # Artist name
+        # tracks[i]['track']['name'], '| Album:',                 # Song/track name
+        # tracks[i]['track']['album']['name'], ' |  URI:',        # Album name         
+        # tracks[i]['track']['uri'], '||',                        # Song/track URI  (unique spotify-based ID)
+        # tracks[i]['track']['external_urls']['spotify'], '\n'    # Spotify song/track URL
+        # )
+
+def insert_tracks(artist, title, album, URI, URL):
+    cursor = db.cursor()
     sql_to_execute = """INSERT INTO spotify_tracks ("Artist", "Title", "Album", "URI", "URL") VALUES (%s, %s, %s, %s, %s)"""
     sql_values = (artist, title, album, URI, URL)
     cursor.execute(sql_to_execute, sql_values)
     db.commit()
 
-    
+    for i in range(len(tracks)):
+        # (artist, title, album, URI, URL)
+        insert_tracks(tracks[i]['track']['artists'][0]['name'], 
+            tracks[i]['track']['name'], 
+            tracks[i]['track']['album']['name'], 
+            tracks[i]['track']['uri'], 
+            tracks[i]['track']['external_urls']['spotify'])
 
-for i in range(len(tracks)):
-    # print(tracks[i]['track']['artists'][0]['name'], '-',    # Artist name
-    # tracks[i]['track']['name'], '| Album:',                 # Song/track name
-    # tracks[i]['track']['album']['name'], ' |  URI:',        # Album name         
-    # tracks[i]['track']['uri'], '||',                        # Song/track URI  (unique spotify-based ID)
-    # tracks[i]['track']['external_urls']['spotify'], '\n'    # Spotify song/track URL
-    # )
-
-    # (artist, title, album, URI, URL)
-    insert_tracks(db, tracks[i]['track']['artists'][0]['name'], 
-        tracks[i]['track']['name'], 
-        tracks[i]['track']['album']['name'], 
-        tracks[i]['track']['uri'], 
-        tracks[i]['track']['external_urls']['spotify'])
-
-
+def retrieve_track_info():
+    cursor = db.cursor()
+    sql_to_execute = """SELECT * FROM spotify_tracks"""
+    cursor.execute(sql_to_execute)
+    retrieved_tracks = cursor.fetchall()
+    return retrieved_tracks
+    # for track in retrieved_tracks:
+    #     print(f"{track[1]} by {track[0]} from {track[2]} || {track[3]} || {track[4]}")
 
 
 # -------------------------------------------------------------------------------
@@ -109,7 +110,7 @@ for i in range(len(tracks)):
 
 
 ### This method prompts the user to confirm access
-# token = util.prompt_for_user_token(username, scope=scope, 
+# token = util.prompt_for_user_token(username, scope=playlist_scope, 
 #         client_id=client_id, client_secret=client_secret,
 #         redirect_uri=redirecturi)
 
