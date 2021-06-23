@@ -1,17 +1,55 @@
 {% extends "layout.html" %}
 
-
 {% block head %}
 
-    <title>Index Title</title>
+    <title>Spotify Missed Connections</title>
 
 {% endblock %}
 
 
-
 {% block body %}
 
-    <h1 class="mainmenu">TEST TEXT</h1>
+<h1 class="maintext">Here are some songs you might've missed:</h1>
+
+<div class="db-list">
+    <table>
+        <thead>
+            <tr class="head-row">
+                <th>Artist</th>
+                <th>Track</th>
+                <th>Album</th>
+            </tr>
+        </thead>
+
+        {% for track in total_tracks %}
+        <!-- Spotify URL -->
+
+            <tr>
+                <a href={{ track[4] }}>
+                <td>
+                    <!-- Artist -->
+                    {{ track[0] }}
+                </td>
+
+                <td>
+                    <!-- title -->
+                    {{ track[1] }}
+                </td>
+
+                <td>
+                    <!-- Album -->
+                    {{ track[2] }}
+                </td>
+                </a>
+            </tr>
+        
+        
+        {% endfor %}
+
+    </table>
+</div>
+
+
 
 {% endblock %}
 

@@ -9,3 +9,8 @@ __pycache__/
 
 # py files
 config.py
+
+# Assorted files
+*.txt
+.cache
+.cache*
