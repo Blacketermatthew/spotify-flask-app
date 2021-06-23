@@ -13,39 +13,37 @@
 
 <div class="db-list">
     <table>
-        <tr id="head-row">
-            <th>Artist</th>
-            <th>Track</th>
-            <th>Album</th>
-            <th>Link</th>
-        </tr>
+        <thead>
+            <tr class="head-row">
+                <th>Artist</th>
+                <th>Track</th>
+                <th>Album</th>
+            </tr>
+        </thead>
 
         {% for track in total_tracks %}
-        <tr>
-            <td>
-                <!-- Artist -->
-                {{ track[0] }}
-            </td>
+        <!-- Spotify URL -->
 
-            <td>
-                <!-- title -->
-                {{ track[1] }}
-            </td>
-
-            <td>
-                <!-- Album -->
-                {{ track[2] }}
-            </td>
-
-            <td>
-                <!-- Spotify URL -->
+            <tr>
                 <a href={{ track[4] }}>
-                    Spotify Track Link
+                <td>
+                    <!-- Artist -->
+                    {{ track[0] }}
+                </td>
+
+                <td>
+                    <!-- title -->
+                    {{ track[1] }}
+                </td>
+
+                <td>
+                    <!-- Album -->
+                    {{ track[2] }}
+                </td>
                 </a>
-            </td>
-
-        </tr>
-
+            </tr>
+        
+        
         {% endfor %}
 
     </table>

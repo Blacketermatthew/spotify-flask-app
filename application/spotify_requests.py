@@ -10,7 +10,6 @@ from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 import spotipy.util as util
 
 
-
 ########## SCOPES ###########
 # You have to specify what you'd like to access through pre-defined scopes.
 # LIST OF AVAILABLE SCOPES: https://developer.spotify.com/documentation/general/guides/scopes/#user-read-playback-state
@@ -30,33 +29,35 @@ run_playlist_uri = os.getenv("RUN_PLAYLIST")
 party_playlist_uri = os.getenv("PARTY_PLAYLIST")
 
 username = "1242575449"  # My Spotify "username"
-redirecturi='http://127.0.0.1:9090'  # Spotify requires you to create a redirect_uri.  For now, it's localhost
+# Spotify requires you to create a redirect_uri.  For now, it's localhost
+redirecturi = 'http://127.0.0.1:9090'
 
 load_dotenv()
 db_username = os.getenv("PSQL_USERNAME")
 db_password = os.getenv("PSQL_PASSWORD")
 
 db = psycopg2.connect(
-    database = "CRC_DB",
-    user = db_username,
-    password = db_password,
-    host = "localhost",
-    port = "5432")
+    database="CRC_DB",
+    user=db_username,
+    password=db_password,
+    host="localhost",
+    port="5432")
 
 # Scope required to access my private playlist Discover Weekly
 playlist_scope = "playlist-read-private"
-sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=client_id, client_secret=client_secret))
-playlist_results = sp.user_playlist_tracks(user=username, playlist_id=discover_playlist_uri, fields='items, name')
+sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(
+    client_id=client_id, client_secret=client_secret))
+playlist_results = sp.user_playlist_tracks(
+    user=username, playlist_id=discover_playlist_uri, fields='items, name')
 tracks = playlist_results['items']
 
+# print(tracks[i]['track']['artists'][0]['name'], '-',    # Artist name
+# tracks[i]['track']['name'], '| Album:',                 # Song/track name
+# tracks[i]['track']['album']['name'], ' |  URI:',        # Album name
+# tracks[i]['track']['uri'], '||',                        # Song/track URI  (unique spotify-based ID)
+# tracks[i]['track']['external_urls']['spotify'], '\n'    # Spotify song/track URL
+# )
 
-
-        # print(tracks[i]['track']['artists'][0]['name'], '-',    # Artist name
-        # tracks[i]['track']['name'], '| Album:',                 # Song/track name
-        # tracks[i]['track']['album']['name'], ' |  URI:',        # Album name         
-        # tracks[i]['track']['uri'], '||',                        # Song/track URI  (unique spotify-based ID)
-        # tracks[i]['track']['external_urls']['spotify'], '\n'    # Spotify song/track URL
-        # )
 
 def insert_tracks(artist, title, album, URI, URL):
     cursor = db.cursor()
@@ -65,13 +66,6 @@ def insert_tracks(artist, title, album, URI, URL):
     cursor.execute(sql_to_execute, sql_values)
     db.commit()
 
-    for i in range(len(tracks)):
-        # (artist, title, album, URI, URL)
-        insert_tracks(tracks[i]['track']['artists'][0]['name'], 
-            tracks[i]['track']['name'], 
-            tracks[i]['track']['album']['name'], 
-            tracks[i]['track']['uri'], 
-            tracks[i]['track']['external_urls']['spotify'])
 
 def retrieve_track_info():
     cursor = db.cursor()
@@ -81,6 +75,14 @@ def retrieve_track_info():
     return retrieved_tracks
     # for track in retrieved_tracks:
     #     print(f"{track[1]} by {track[0]} from {track[2]} || {track[3]} || {track[4]}")
+
+# for i in range(len(tracks)):
+#     # (artist, title, album, URI, URL)
+#     insert_tracks(tracks[i]['track']['artists'][0]['name'],
+#                     tracks[i]['track']['name'],
+#                     tracks[i]['track']['album']['name'],
+#                     tracks[i]['track']['uri'],
+#                     tracks[i]['track']['external_urls']['spotify'])
 
 
 # -------------------------------------------------------------------------------
@@ -107,14 +109,12 @@ def retrieve_track_info():
 #                 break
 
 
-
-
-### This method prompts the user to confirm access
-# token = util.prompt_for_user_token(username, scope=playlist_scope, 
+# This method prompts the user to confirm access
+# token = util.prompt_for_user_token(username, scope=playlist_scope,
 #         client_id=client_id, client_secret=client_secret,
 #         redirect_uri=redirecturi)
 
-# if token: 
+# if token:
 #     sp = spotipy.Spotify(auth=token)
 #     playlists = sp.current_user_playlists()
 
@@ -129,11 +129,6 @@ def retrieve_track_info():
 #     print("Can't get token for", username)
 
 
-
-
-
-
-
 # class SpotifyAuth:
 
 #     def __init__(self):
@@ -145,7 +140,3 @@ def retrieve_track_info():
 #             print(self.auth_response)
 #         else:
 #             print(self.auth_response.status_code)
-
-
-
-
