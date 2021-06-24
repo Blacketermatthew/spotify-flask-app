@@ -14,12 +14,12 @@ header {
 }
 
 
+/* --- Nav Bar --- */
 .navbar {
     overflow: hidden;
     background-color: #323135;
 }
 
-/* --- Nav Bar --- */
 .navbar a {
     color: #f0f0f0;
     text-decoration: none;
@@ -38,14 +38,18 @@ header {
     background-color: #178601;
 }
 
+a.highrec {
+    font-size: 20px;
+}
+
 /* --- Main Text --- */
 
 h1.maintext {
     text-align: center;
     font-size: 75px;
     font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #b2ff24;
-    text-shadow: 1px 1px 3px #235291;
+    color: #c6f83b;
+    text-shadow: 1px 1px 3px #301709;
 }
 
 
@@ -59,10 +63,11 @@ table {
     background-color: #3e416d;
     color: white;
     overflow-y:scroll;
+    table-layout: fixed;
     height:300px;
     display:block;
     border-collapse:collapse;
-    width:75%;
+    width: 75%;
     position: relative;
     margin-left: auto;
     margin-right: auto;
@@ -73,6 +78,7 @@ table {
     color: white;
     padding: 5px 0px;
     font-size: 25px;
+    width: 500px;
     text-shadow: 3px 3px 3px #0b4d21;
     top: 0;
     position: sticky;

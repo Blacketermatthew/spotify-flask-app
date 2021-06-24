@@ -19,11 +19,9 @@ def index():
 
     return render_template('index.html', home=True, total_tracks=total_tracks)
 
-
-
-@app.route("/one")
-def one():
-    return render_template('index.html', one=True)
+@app.route("/highly_recommended")
+def highly_recommended():
+    return render_template('index.html', rec_selected=True)
 
 @app.route("/two")
 def two():

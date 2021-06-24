@@ -13,10 +13,16 @@
 <script type=text/javascript src="{{
     url_for('static', filename='jquery.js') }}"></script>
 
-<!-- Main Text-->
-<h1 class="maintext">Here are some songs you might've missed:</h1>
+
 
 <div class="db-list">
+
+
+    {% if total_tracks %}
+
+    <!-- Main Text-->
+    <h1 class="maintext">Here are some songs you might've missed:</h1>
+    
     <table>
 
         <thead>
@@ -28,16 +34,15 @@
         </thead>
 
         <tbody>
-
             {% for track in total_tracks %}
 
                 <tr class="clickable-row" onclick="openInNewTab('{{ track[4] }}');">  
-                <script>
-                    function openInNewTab(url) {
-                        var win = window.open(url, '_blank');
-                        win.focus();
-                    }
-                </script>
+                    <script>
+                        function openInNewTab(url) {
+                            var win = window.open(url, '_blank');
+                            win.focus();
+                        }
+                    </script>
 
                     <td>
                         <!-- Artist -->
@@ -55,10 +60,18 @@
                 </tr>
 
             {% endfor %}
-
         </tbody>
-
     </table>
+
+    {% else %}
+
+        <center>
+        <h1 class="maintext">Spotify really thinks you'd like: </h1>
+        <p>DEVO</p>
+        </center>
+
+    {% endif %}
+
 </div>
 
 

@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 import json
 import pandas as pd
@@ -51,12 +50,12 @@ playlist_results = sp.user_playlist_tracks(
     user=username, playlist_id=discover_playlist_uri, fields='items, name')
 tracks = playlist_results['items']
 
-# print(tracks[i]['track']['artists'][0]['name'], '-',    # Artist name
-# tracks[i]['track']['name'], '| Album:',                 # Song/track name
-# tracks[i]['track']['album']['name'], ' |  URI:',        # Album name
-# tracks[i]['track']['uri'], '||',                        # Song/track URI  (unique spotify-based ID)
-# tracks[i]['track']['external_urls']['spotify'], '\n'    # Spotify song/track URL
-# )
+# tracks[i]['track']['artists'][0]['name']           # Artist name
+# tracks[i]['track']['name']                         # Song/track name
+# tracks[i]['track']['album']['name']                # Album name
+# tracks[i]['track']['uri']                          # Song/track URI  (unique spotify-based ID)
+# tracks[i]['track']['external_urls']['spotify']     # Spotify song/track URL
+
 
 
 def insert_tracks(artist, title, album, URI, URL):
@@ -76,6 +75,7 @@ def retrieve_track_info():
     # for track in retrieved_tracks:
     #     print(f"{track[1]} by {track[0]} from {track[2]} || {track[3]} || {track[4]}")
 
+
 # for i in range(len(tracks)):
 #     # (artist, title, album, URI, URL)
 #     insert_tracks(tracks[i]['track']['artists'][0]['name'],
@@ -85,49 +85,39 @@ def retrieve_track_info():
 #                     tracks[i]['track']['external_urls']['spotify'])
 
 
+
+
+from datetime import datetime
+
+nowtime = datetime.now().strftime("%A %H:%M")
+
+if nowtime == "Wednesday 21:27":
+    print("nowtime!")
+else:
+    print(nowtime)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # -------------------------------------------------------------------------------
-
-# def write_tracks(text_file, tracks):
-#     with open(text_file, 'a') as file_out:
-#         while True:
-#             for item in tracks['items']:
-#                 if 'track' in item:
-#                     track = item['track']
-#                 else:
-#                     track = item
-#                 try:
-#                     track_url = track['external_urls']['spotify']
-#                     file_out.write(track_url + '\n')
-#                 except KeyError:
-#                     print(u'Skipping track {0} by {1} (local only?)'.format(
-#                             track['name'], track['artists'][0]['name']))
-#             # 1 page = 50 results
-#             # check if there are more pages
-#             if tracks['next']:
-#                 tracks = spotify.next(tracks)
-#             else:
-#                 break
-
-
-# This method prompts the user to confirm access
-# token = util.prompt_for_user_token(username, scope=playlist_scope,
-#         client_id=client_id, client_secret=client_secret,
-#         redirect_uri=redirecturi)
-
-# if token:
-#     sp = spotipy.Spotify(auth=token)
-#     playlists = sp.current_user_playlists()
-
-#     while playlists:
-#         for i, playlist in enumerate(playlists['items']):
-#             print("%4d %s %s" % (i + 1 + playlists['offset'], playlist['uri'],  playlist['name']))
-#         if playlists['next']:
-#             playlists = sp.next(playlists)
-#         else:
-#             playlists = None
-# else:
-#     print("Can't get token for", username)
-
 
 # class SpotifyAuth:
 
