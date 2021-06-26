@@ -7,6 +7,7 @@ import spotipy  # module for interacting with Spotify
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 import spotipy.util as util
 from datetime import datetime
+from application import app, db
 
 
 ########## SCOPES ###########
@@ -53,13 +54,6 @@ elif os.getenv("IS_DEV"):
 else:
     print("FALSE")
 
-# Connecting to the existing CRC_DB database
-db = psycopg2.connect(
-    database="CRC_DB",
-    user=db_username,
-    password=db_password,
-    host="localhost",
-    port="5432")
 
 # Scope required to access my private playlist Discover Weekly
 playlist_scope = "playlist-read-private"

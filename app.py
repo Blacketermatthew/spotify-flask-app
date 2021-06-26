@@ -1,9 +1,7 @@
 from flask import Flask, render_template, url_for
 from application.spotify_requests import retrieve_track_info, insert_tracks
-
-
-app = Flask(__name__)
-port = 5432
+import psycopg2
+from application import app, db
 
 
 ## Routes ## --------------------------------------
@@ -34,10 +32,7 @@ def three():
 
 
 
-
-
-
 ## App run ## -------------------------------------
 if __name__ == "__main__":
-    app.run(debug=True, port=port)
+    app.run(debug=True)
     
