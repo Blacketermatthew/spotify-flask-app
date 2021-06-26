@@ -3,7 +3,7 @@ from application.spotify_requests import retrieve_track_info, insert_tracks
 
 
 app = Flask(__name__)
-port = 5000
+port = 5432
 
 
 ## Routes ## --------------------------------------
