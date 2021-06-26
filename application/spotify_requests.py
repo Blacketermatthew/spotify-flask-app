@@ -2,7 +2,6 @@ import os
 from dotenv import load_dotenv
 import requests
 import json
-import pandas as pd
 import psycopg2
 import spotipy  # module for interacting with Spotify
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
