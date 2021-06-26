@@ -1,7 +1,9 @@
 from flask import Flask, render_template, url_for
-from application import app
 from application.spotify_requests import retrieve_track_info, insert_tracks
 
+
+app = Flask(__name__)
+port = 5000
 
 
 ## Routes ## --------------------------------------
@@ -36,9 +38,6 @@ def three():
 
 
 ## App run ## -------------------------------------
-app = Flask(__name__)
-port = 5000
-
 if __name__ == "__main__":
     app.run(debug=True, port=port)
     
