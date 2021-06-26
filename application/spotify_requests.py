@@ -35,7 +35,7 @@ if os.environ.get("IS_HEROKU"):
     username = os.environ.get("SPOTIFY_USERNAME")  # My Spotify "username"
     db_username = os.environ.get("PSQL_USERNAME")
     db_password = os.environ.get("PSQL_PASSWORD")
-    redirecturi = 'http://127.0.0.1:9090' # Spotify requires you to create a redirect_uri.  For now, it's localhost
+    redirecturi = os.environ.get("REDIRECT_URI") # Spotify requires you to create a redirect_uri.  For now, it's localhost
 
 # Configures the app when it's ran locally and variables are pulled from .env
 elif os.getenv("IS_DEV"):
