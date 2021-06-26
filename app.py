@@ -2,8 +2,6 @@ from flask import Flask, render_template, url_for
 from application import app
 from application.spotify_requests import retrieve_track_info, insert_tracks
 
-port = 5000
-
 
 
 ## Routes ## --------------------------------------
@@ -21,7 +19,7 @@ def index():
 
 @app.route("/highly_recommended")
 def highly_recommended():
-    return render_template('index.html', rec_selected=True)
+    return render_template('recommendations.html', rec_selected=True)
 
 @app.route("/two")
 def two():
@@ -38,6 +36,9 @@ def three():
 
 
 ## App run ## -------------------------------------
+app = Flask(__name__)
+port = 5000
+
 if __name__ == "__main__":
     app.run(debug=True, port=port)
     

@@ -10,8 +10,7 @@
 
 {% block body %}
 
-<script type=text/javascript src="{{
-    url_for('static', filename='jquery.js') }}"></script>
+
 
 
 
@@ -36,12 +35,11 @@
         <tbody>
             {% for track in total_tracks %}
 
-                <tr class="clickable-row" onclick="openInNewTab('{{ track[4] }}');">  
+                <tr class="clickable-row" onclick="openInNewTab('{{ track[4] }}');">  <!-- Opens track URL in new tab -->
                     <script>
                         function openInNewTab(url) {
                             var win = window.open(url, '_blank');
-                            win.focus();
-                        }
+                            win.focus(); }
                     </script>
 
                     <td>
@@ -49,7 +47,7 @@
                         {{ track[0] }}
                     </td>
                     <td>
-                        <!-- title -->
+                        <!-- Title -->
                         {{ track[1] }}
                     </td>
                     <td>
@@ -62,13 +60,6 @@
             {% endfor %}
         </tbody>
     </table>
-
-    {% else %}
-
-        <center>
-        <h1 class="maintext">Spotify really thinks you'd like: </h1>
-        <p>DEVO</p>
-        </center>
 
     {% endif %}
 

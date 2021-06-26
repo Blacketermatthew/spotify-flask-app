@@ -7,6 +7,7 @@ import psycopg2
 import spotipy  # module for interacting with Spotify
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 import spotipy.util as util
+from datetime import datetime
 
 
 ########## SCOPES ###########
@@ -18,23 +19,42 @@ import spotipy.util as util
 
 
 ######### VARIABLES #########
+
+## Traditional variables from .env
 load_dotenv()
-client_id = os.getenv("SPOTIPY_CLIENT_ID")
-client_secret = os.getenv("SPOITPY_CLIENT_SECRET")
 
-discover_playlist_uri = os.getenv("DISCOVER_WEEKLY_PLAYLIST")
-starred_playlist_uri = os.getenv("STARRED_PLAYLIST")
-run_playlist_uri = os.getenv("RUN_PLAYLIST")
-party_playlist_uri = os.getenv("PARTY_PLAYLIST")
+# Used to configure the app when it's deployed to Heroku
+if os.environ.get("IS_HEROKU"):
+    print("HEROKU")
+    client_id = os.environ.get("SPOTIPY_CLIENT_ID")
+    client_secret = os.environ.get("SPOITPY_CLIENT_SECRET")
+    discover_playlist_uri = os.environ.get("DISCOVER_WEEKLY_PLAYLIST")
+    starred_playlist_uri = os.environ.get("STARRED_PLAYLIST")
+    run_playlist_uri = os.environ.get("RUN_PLAYLIST")
+    party_playlist_uri = os.environ.get("PARTY_PLAYLIST")
+    username = os.environ.get("SPOTIFY_USERNAME")  # My Spotify "username"
+    db_username = os.environ.get("PSQL_USERNAME")
+    db_password = os.environ.get("PSQL_PASSWORD")
+    redirecturi = 'http://127.0.0.1:9090' # Spotify requires you to create a redirect_uri.  For now, it's localhost
 
-username = "1242575449"  # My Spotify "username"
-# Spotify requires you to create a redirect_uri.  For now, it's localhost
-redirecturi = 'http://127.0.0.1:9090'
+# Configures the app when it's ran locally and variables are pulled from .env
+elif os.getenv("IS_DEV"):
+    print("LOCAL DEV")
+    client_id = os.getenv("SPOTIPY_CLIENT_ID")
+    client_secret = os.getenv("SPOITPY_CLIENT_SECRET")
+    discover_playlist_uri = os.getenv("DISCOVER_WEEKLY_PLAYLIST")
+    starred_playlist_uri = os.getenv("STARRED_PLAYLIST")
+    run_playlist_uri = os.getenv("RUN_PLAYLIST")
+    party_playlist_uri = os.getenv("PARTY_PLAYLIST")
+    username = os.getenv("SPOTIFY_USERNAME")  # My Spotify "username"
+    db_username = os.getenv("PSQL_USERNAME")
+    db_password = os.getenv("PSQL_PASSWORD")
+    redirecturi = 'http://127.0.0.1:9090' # Spotify requires you to create a redirect_uri.  For now, it's localhost
 
-load_dotenv()
-db_username = os.getenv("PSQL_USERNAME")
-db_password = os.getenv("PSQL_PASSWORD")
+else:
+    print("FALSE")
 
+# Connecting to the existing CRC_DB database
 db = psycopg2.connect(
     database="CRC_DB",
     user=db_username,
@@ -50,13 +70,9 @@ playlist_results = sp.user_playlist_tracks(
     user=username, playlist_id=discover_playlist_uri, fields='items, name')
 tracks = playlist_results['items']
 
-# tracks[i]['track']['artists'][0]['name']           # Artist name
-# tracks[i]['track']['name']                         # Song/track name
-# tracks[i]['track']['album']['name']                # Album name
-# tracks[i]['track']['uri']                          # Song/track URI  (unique spotify-based ID)
-# tracks[i]['track']['external_urls']['spotify']     # Spotify song/track URL
 
 
+######## Functions #########
 
 def insert_tracks(artist, title, album, URI, URL):
     cursor = db.cursor()
@@ -64,7 +80,6 @@ def insert_tracks(artist, title, album, URI, URL):
     sql_values = (artist, title, album, URI, URL)
     cursor.execute(sql_to_execute, sql_values)
     db.commit()
-
 
 def retrieve_track_info():
     cursor = db.cursor()
@@ -75,26 +90,19 @@ def retrieve_track_info():
     # for track in retrieved_tracks:
     #     print(f"{track[1]} by {track[0]} from {track[2]} || {track[3]} || {track[4]}")
 
+def weekly_scheduler():
+    current_time = datetime.now().strftime("%A %H:%M")  # Returns current Day of the Week and Hour:Minute  
 
-# for i in range(len(tracks)):
-#     # (artist, title, album, URI, URL)
-#     insert_tracks(tracks[i]['track']['artists'][0]['name'],
-#                     tracks[i]['track']['name'],
-#                     tracks[i]['track']['album']['name'],
-#                     tracks[i]['track']['uri'],
-#                     tracks[i]['track']['external_urls']['spotify'])
-
-
-
-
-from datetime import datetime
-
-nowtime = datetime.now().strftime("%A %H:%M")
-
-if nowtime == "Wednesday 21:27":
-    print("nowtime!")
-else:
-    print(nowtime)
+    if current_time == "Monday 12:00":
+        for i in range(len(tracks)):
+            # (artist, title, album, URI, URL)
+            insert_tracks(tracks[i]['track']['artists'][0]['name'],             # Artist name
+                            tracks[i]['track']['name'],                         # Song/track name
+                            tracks[i]['track']['album']['name'],                # Album name
+                            tracks[i]['track']['uri'],                          # Song/track URI  (unique spotify-based ID)
+                            tracks[i]['track']['external_urls']['spotify'])     # Spotify song/track URL
+    else:
+        print(current_time)
 
 
 
