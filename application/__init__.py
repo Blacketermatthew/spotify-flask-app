@@ -12,7 +12,7 @@ if os.environ.get("IS_HEROKU"):
     db_username = os.environ.get("PSQL_USERNAME")
     db_password = os.environ.get("PSQL_PASSWORD")
     # Connect to the postgres database in Heroku
-    db = psycopg2.connect(database_url, sslmode='require')
+    db = psycopg2.connect(database_url)
 
 elif os.getenv("IS_DEV"):
     db_username = os.getenv("PSQL_USERNAME")

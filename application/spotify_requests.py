@@ -9,7 +9,6 @@ import spotipy.util as util
 from datetime import datetime
 from application import app, db
 
-
 ########## SCOPES ###########
 # You have to specify what you'd like to access through pre-defined scopes.
 # LIST OF AVAILABLE SCOPES: https://developer.spotify.com/documentation/general/guides/scopes/#user-read-playback-state
@@ -49,7 +48,7 @@ elif os.getenv("IS_DEV"):
     username = os.getenv("SPOTIFY_USERNAME")  # My Spotify "username"
     db_username = os.getenv("PSQL_USERNAME")
     db_password = os.getenv("PSQL_PASSWORD")
-    redirecturi = 'http://127.0.0.1:9090' # Spotify requires you to create a redirect_uri.  For now, it's localhost
+    redirecturi = 'http://127.0.0.1:5000' # Spotify requires you to create a redirect_uri.  For now, it's localhost
 
 else:
     print("FALSE")
@@ -67,17 +66,47 @@ tracks = playlist_results['items']
 
 ######## Functions #########
 
-def insert_tracks(artist, title, album, URI, URL):
+def create_table():
+    try:
+        command = """
+            CREATE TABLE spotify_tracks (
+                    track_id SERIAL PRIMARY KEY,
+                    artist VARCHAR(200) NOT NULL,
+                    track VARCHAR(200) NOT NULL,
+                    album VARCHAR(300) NOT NULL,
+                    spotify_uri VARCHAR(200) NOT NULL,
+                    url VARCHAR(300) NOT NULL
+                    )
+            """
+        cursor = db.cursor()
+        cursor.execute(command)
+        db.commit()
+    except:
+        print("Table already exists")
+
+def insert_tracks():
     cursor = db.cursor()
-    sql_to_execute = """INSERT INTO spotify_tracks ("Artist", "Title", "Album", "URI", "URL") VALUES (%s, %s, %s, %s, %s)"""
-    sql_values = (artist, title, album, URI, URL)
-    cursor.execute(sql_to_execute, sql_values)
+    insert_sql = """INSERT INTO spotify_tracks ("artist", "track", "album", "spotify_uri", "url") VALUES (%s, %s, %s, %s, %s)"""
+    # sql_values = (artist, title, album, URI, URL)
+
+    for i in range(len(tracks)):
+        # (artist, title, album, URI, URL)
+        sql_values = (tracks[i]['track']['artists'][0]['name'],             # Artist name
+                        tracks[i]['track']['name'],                         # Song/track name
+                        tracks[i]['track']['album']['name'],                # Album name
+                        tracks[i]['track']['uri'],                          # Song/track URI  (unique spotify-based ID)
+                        tracks[i]['track']['external_urls']['spotify'])     # Spotify song/track URL
+        cursor.execute(insert_sql, sql_values)
+        
     db.commit()
 
 def retrieve_track_info():
     cursor = db.cursor()
-    sql_to_execute = """SELECT * FROM spotify_tracks"""
-    cursor.execute(sql_to_execute)
+    select_sql = """SELECT * FROM spotify_tracks"""
+    cursor.execute(select_sql)
+    
+    #cursor.execute("""SELECT * FROM spotify_tracks""")
+    
     retrieved_tracks = cursor.fetchall()
     return retrieved_tracks
     # for track in retrieved_tracks:
@@ -87,33 +116,10 @@ def weekly_scheduler():
     current_time = datetime.now().strftime("%A %H:%M")  # Returns current Day of the Week and Hour:Minute  
 
     if current_time == "Monday 12:00":
-        for i in range(len(tracks)):
-            # (artist, title, album, URI, URL)
-            insert_tracks(tracks[i]['track']['artists'][0]['name'],             # Artist name
-                            tracks[i]['track']['name'],                         # Song/track name
-                            tracks[i]['track']['album']['name'],                # Album name
-                            tracks[i]['track']['uri'],                          # Song/track URI  (unique spotify-based ID)
-                            tracks[i]['track']['external_urls']['spotify'])     # Spotify song/track URL
+        print("playlist time!")
+        insert_tracks()
     else:
-        print(current_time)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        print(f"Current Time: {current_time}.  The playlist updates every Monday.")
 
 
 
