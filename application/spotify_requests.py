@@ -147,8 +147,7 @@ class playlist:
     def weekly_scheduler(self):
         current_time = datetime.now().strftime("%A %H:%M")  # Returns current Day of the Week and Hour:Minute  
 
-        # if current_time == "Monday 12:00":
-        if current_time == "Wednesday 23:12":
+        if current_time == "Monday 12:00":
             print("playlist time!")
             self.insert_tracks()
         else:
