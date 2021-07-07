@@ -22,6 +22,9 @@ from application import app, db
 ## Traditional variables from .env
 load_dotenv()
 
+
+### NOTE: CREATE A CLASS FOR THIS IN A SEPARATE FILE? #############
+
 # Used to configure the app when it's deployed to Heroku
 if os.environ.get("IS_HEROKU"):
     print("HEROKU")
@@ -64,65 +67,68 @@ tracks = playlist_results['items']
 
 
 
-######## Functions #########
+class playlist:
 
-def create_table():
-    try:
-        command = """
-            CREATE TABLE spotify_tracks (
-                    track_id SERIAL PRIMARY KEY,
-                    artist VARCHAR(200) NOT NULL,
-                    track VARCHAR(200) NOT NULL,
-                    album VARCHAR(300) NOT NULL,
-                    spotify_uri VARCHAR(200) NOT NULL,
-                    url VARCHAR(300) NOT NULL
-                    )
-            """
+    def __init__(self, playlist_title, ):
+        self.playlist_title = playlist_title
+
+    ######## Functions #########
+
+    def create_table(self):
+        try:
+            command = """
+                CREATE TABLE spotify_tracks (
+                        track_id SERIAL PRIMARY KEY,
+                        artist VARCHAR(200) NOT NULL,
+                        track VARCHAR(200) NOT NULL,
+                        album VARCHAR(300) NOT NULL,
+                        spotify_uri VARCHAR(200) NOT NULL,
+                        url VARCHAR(300) NOT NULL
+                        )
+                """
+            cursor = db.cursor()
+            cursor.execute(command)
+            db.commit()
+        except:
+            print("Table already exists")
+
+    def insert_tracks(self):
         cursor = db.cursor()
-        cursor.execute(command)
+        insert_sql = """INSERT INTO spotify_tracks ("artist", "track", "album", "spotify_uri", "url") VALUES (%s, %s, %s, %s, %s)"""
+        # sql_values = (artist, title, album, URI, URL)
+
+        for i in range(len(tracks)):
+            # (artist, title, album, URI, URL)
+            sql_values = (tracks[i]['track']['artists'][0]['name'],             # Artist name
+                            tracks[i]['track']['name'],                         # Song/track name
+                            tracks[i]['track']['album']['name'],                # Album name
+                            tracks[i]['track']['uri'],                          # Song/track URI  (unique spotify-based ID)
+                            tracks[i]['track']['external_urls']['spotify'])     # Spotify song/track URL
+            cursor.execute(insert_sql, sql_values)
+
         db.commit()
-    except:
-        print("Table already exists")
 
-def insert_tracks():
-    cursor = db.cursor()
-    insert_sql = """INSERT INTO spotify_tracks ("artist", "track", "album", "spotify_uri", "url") VALUES (%s, %s, %s, %s, %s)"""
-    # sql_values = (artist, title, album, URI, URL)
+    def retrieve_track_info(self):
+        cursor = db.cursor()
+        select_sql = """SELECT * FROM spotify_tracks"""
+        cursor.execute(select_sql)
+        retrieved_tracks = cursor.fetchall()
+        return retrieved_tracks
+        # for track in retrieved_tracks:
+        #     print(f"{track[1]} by {track[0]} from {track[2]} || {track[3]} || {track[4]}")
 
-    for i in range(len(tracks)):
-        # (artist, title, album, URI, URL)
-        sql_values = (tracks[i]['track']['artists'][0]['name'],             # Artist name
-                        tracks[i]['track']['name'],                         # Song/track name
-                        tracks[i]['track']['album']['name'],                # Album name
-                        tracks[i]['track']['uri'],                          # Song/track URI  (unique spotify-based ID)
-                        tracks[i]['track']['external_urls']['spotify'])     # Spotify song/track URL
-        cursor.execute(insert_sql, sql_values)
-        
-    db.commit()
+    def weekly_scheduler(self):
+        current_time = datetime.now().strftime("%A %H:%M")  # Returns current Day of the Week and Hour:Minute  
 
-def retrieve_track_info():
-    cursor = db.cursor()
-    select_sql = """SELECT * FROM spotify_tracks"""
-    cursor.execute(select_sql)
-    
-    #cursor.execute("""SELECT * FROM spotify_tracks""")
-    
-    retrieved_tracks = cursor.fetchall()
-    return retrieved_tracks
-    # for track in retrieved_tracks:
-    #     print(f"{track[1]} by {track[0]} from {track[2]} || {track[3]} || {track[4]}")
-
-def weekly_scheduler():
-    current_time = datetime.now().strftime("%A %H:%M")  # Returns current Day of the Week and Hour:Minute  
-
-    if current_time == "Monday 12:00":
-        print("playlist time!")
-        insert_tracks()
-    else:
-        print(f"Current Time: {current_time}.  The playlist updates every Monday.")
+        if current_time == "Monday 12:00":
+            print("playlist time!")
+            self.insert_tracks()
+        else:
+            print(f"Current Time: {current_time}.  The playlist updates every Monday.")
 
 
 
+discover_weekly = playlist("Discover Weekly")
 
 # -------------------------------------------------------------------------------
 

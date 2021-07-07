@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for
-from application.spotify_requests import retrieve_track_info, insert_tracks, create_table, weekly_scheduler
+from application.spotify_requests import discover_weekly
 import psycopg2
 from application import app, db
 
@@ -10,8 +10,8 @@ from application import app, db
 @app.route('/home')
 def index():
 
-    weekly_scheduler()
-    total_tracks = retrieve_track_info()
+    discover_weekly.weekly_scheduler()
+    total_tracks = discover_weekly.retrieve_track_info()
 
     # for track in total_tracks:
     #     print(track[0])

@@ -5,8 +5,9 @@ import psycopg2
 
 
 app = Flask(__name__)
-load_dotenv()
 
+
+load_dotenv()
 if os.environ.get("IS_HEROKU"):
     database_url = os.environ.get('DATABASE_URL')
     db_username = os.environ.get("PSQL_USERNAME")
