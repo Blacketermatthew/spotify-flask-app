@@ -27,7 +27,7 @@ load_dotenv()
 
 # Used to configure the app when it's deployed to Heroku
 if os.environ.get("IS_HEROKU"):
-    print("HEROKU")
+    print("\nHEROKU")
     client_id = os.environ.get("SPOTIPY_CLIENT_ID")
     client_secret = os.environ.get("SPOITPY_CLIENT_SECRET")
     discover_playlist_uri = os.environ.get("DISCOVER_WEEKLY_PLAYLIST")
@@ -41,7 +41,7 @@ if os.environ.get("IS_HEROKU"):
 
 # Configures the app when it's ran locally and variables are pulled from .env
 elif os.getenv("IS_DEV"):
-    print("LOCAL DEV")
+    print("\nLOCAL DEV")
     client_id = os.getenv("SPOTIPY_CLIENT_ID")
     client_secret = os.getenv("SPOITPY_CLIENT_SECRET")
     discover_playlist_uri = os.getenv("DISCOVER_WEEKLY_PLAYLIST")
@@ -71,6 +71,7 @@ class playlist:
 
     def __init__(self, playlist_title, ):
         self.playlist_title = playlist_title
+        self.create_table()
 
     ######## Functions #########
 
@@ -90,30 +91,56 @@ class playlist:
             cursor.execute(command)
             db.commit()
         except:
-            print("Table already exists")
+            print(f"Table already exists")
+            db.rollback()
+        finally:
+            # closing database connection.
+            if db:
+                cursor.close()
+                print("PostgreSQL connection is closed (create)\n")
+
 
     def insert_tracks(self):
-        cursor = db.cursor()
         insert_sql = """INSERT INTO spotify_tracks ("artist", "track", "album", "spotify_uri", "url") VALUES (%s, %s, %s, %s, %s)"""
         # sql_values = (artist, title, album, URI, URL)
 
-        for i in range(len(tracks)):
-            # (artist, title, album, URI, URL)
-            sql_values = (tracks[i]['track']['artists'][0]['name'],             # Artist name
-                            tracks[i]['track']['name'],                         # Song/track name
-                            tracks[i]['track']['album']['name'],                # Album name
-                            tracks[i]['track']['uri'],                          # Song/track URI  (unique spotify-based ID)
-                            tracks[i]['track']['external_urls']['spotify'])     # Spotify song/track URL
-            cursor.execute(insert_sql, sql_values)
+        try:
+            cursor = db.cursor()
+            for i in range(len(tracks)):
+                # (artist, title, album, URI, URL)
+                sql_values = (tracks[i]['track']['artists'][0]['name'],             # Artist name
+                                tracks[i]['track']['name'],                         # Song/track name
+                                tracks[i]['track']['album']['name'],                # Album name
+                                tracks[i]['track']['uri'],                          # Song/track URI  (unique spotify-based ID)
+                                tracks[i]['track']['external_urls']['spotify'])     # Spotify song/track URL
+                cursor.execute(insert_sql, sql_values)
+            db.commit()
 
-        db.commit()
+        except:
+            print("Nothing to insert right now")
+            db.rollback()
+        finally:
+            # closing database connection.
+            if db:
+                cursor.close()
+                print("PostgreSQL connection is closed (insert)\n")
+
 
     def retrieve_track_info(self):
-        cursor = db.cursor()
-        select_sql = """SELECT * FROM spotify_tracks"""
-        cursor.execute(select_sql)
-        retrieved_tracks = cursor.fetchall()
-        return retrieved_tracks
+        try:
+            cursor = db.cursor()
+            select_sql = "SELECT * FROM spotify_tracks"
+            cursor.execute(select_sql)
+            retrieved_tracks = cursor.fetchall()
+            return retrieved_tracks
+        except (Exception, psycopg2.Error) as error:
+            print("Error:", error)
+            db.rollback()
+        finally:
+            # closing database connection.
+            if db:
+                cursor.close()
+                print("PostgreSQL connection is closed (retrieve)\n")
         # for track in retrieved_tracks:
         #     print(f"{track[1]} by {track[0]} from {track[2]} || {track[3]} || {track[4]}")
 

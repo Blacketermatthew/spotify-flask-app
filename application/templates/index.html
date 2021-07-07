@@ -16,9 +16,6 @@
 
 <div class="db-list">
 
-
-    {% if total_tracks %}
-
     <!-- Main Text-->
     <h1 class="maintext">Here are some songs you might've missed:</h1>
     
@@ -32,6 +29,8 @@
             </tr>
         </thead>
 
+        
+        {% if total_tracks %}
         <tbody>
             {% for track in total_tracks %}
 
