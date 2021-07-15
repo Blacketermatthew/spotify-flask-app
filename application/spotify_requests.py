@@ -148,7 +148,7 @@ class playlist:
         current_time = datetime.now().strftime("%A %H:%M")  # Returns current Day of the Week and Hour:Minute  
 
         # if current_time == "Monday 12:00":
-        if current_time == "Thursday 14:55":
+        if current_time == "Thursday 15:30":
             print("playlist time!")
             self.insert_tracks()
         else:
