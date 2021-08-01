@@ -1,7 +1,9 @@
-import datetime
 from application.spotify_requests import discover_weekly
-   
+from apscheduler.schedulers.blocking import BlockingScheduler
 
-if __name__ == "__main__":
-    #date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    discover_weekly.weekly_scheduler()
+sched = BlockingScheduler()
+
+@sched.scheduled_job('cron', day_of_week='mon', hour=12)
+def weekly_cronjob():
+    discover_weekly.insert_tracks()
+

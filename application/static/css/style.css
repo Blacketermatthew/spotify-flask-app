@@ -44,9 +44,9 @@ a.highrec {
 
 /* --- Main Text --- */
 
-h1.maintext {
+h1.maintext, h5.maintext {
     text-align: center;
-    font-size: 75px;
+    font-size: 55px;
     font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #c6f83b;
     text-shadow: 1px 1px 3px #301709;

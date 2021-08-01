@@ -59,17 +59,15 @@ else:
 
 # Scope required to access my private playlist Discover Weekly
 playlist_scope = "playlist-read-private"
-sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(
-    client_id=client_id, client_secret=client_secret))
-playlist_results = sp.user_playlist_tracks(
-    user=username, playlist_id=discover_playlist_uri, fields='items, name')
+sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=client_id, client_secret=client_secret))
+playlist_results = sp.user_playlist_tracks(user=username, playlist_id=discover_playlist_uri, fields='items, name')
 tracks = playlist_results['items']
 
 
 
-class playlist:
+class Playlist:
 
-    def __init__(self, playlist_title, ):
+    def __init__(self, playlist_title):
         self.playlist_title = playlist_title
         self.create_table()
 
@@ -78,7 +76,7 @@ class playlist:
     def create_table(self):
         try:
             command = """
-                CREATE TABLE spotify_tracks (
+                CREATE TABLE IF NOT EXISTS spotify_tracks (
                         track_id SERIAL PRIMARY KEY,
                         artist VARCHAR(200) NOT NULL,
                         track VARCHAR(200) NOT NULL,
@@ -145,18 +143,18 @@ class playlist:
         #     print(f"{track[1]} by {track[0]} from {track[2]} || {track[3]} || {track[4]}")
 
     def weekly_scheduler(self):
-        current_time = datetime.now().strftime("%A %H:%M")  # Returns current Day of the Week and Hour:Minute  
+        # current_time = datetime.now().strftime("%A %H:%M")  # Returns current Day of the Week and Hour:Minute  
 
-        # if current_time == "Monday 12:00":
-        if current_time == "Thursday 15:30":
-            print("playlist time!")
-            self.insert_tracks()
-        else:
-            print(f"Current Time: {current_time}.  The playlist updates every Monday at noon.")
+        # # if current_time == "Monday 12:00":
+        # if current_time == "Thursday 15:30":
+            # print("playlist time!")
+        self.insert_tracks()
+        # else:
+        #     print(f"Current Time: {current_time}.  The playlist updates every Monday at noon.")
 
 
 
-discover_weekly = playlist("Discover Weekly")
+discover_weekly = Playlist("Discover Weekly")
 
 
 

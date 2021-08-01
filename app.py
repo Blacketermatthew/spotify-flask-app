@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for
 from application.spotify_requests import discover_weekly
 import psycopg2
 from application import app, db
+from scheduler import sched
 
 
 ## Routes ## --------------------------------------
@@ -10,13 +11,14 @@ from application import app, db
 @app.route('/home')
 def index():
 
-    discover_weekly.weekly_scheduler()
+    # discover_weekly.weekly_scheduler()
     total_tracks = discover_weekly.retrieve_track_info()
 
+    number_of_tracks = len(total_tracks)
     # for track in total_tracks:
     #     print(track[0])
 
-    return render_template('index.html', home=True, total_tracks=total_tracks)
+    return render_template('index.html', home=True, total_tracks=total_tracks, number_of_tracks=number_of_tracks)
 
 @app.route("/highly_recommended")
 def highly_recommended():
@@ -35,4 +37,5 @@ def three():
 ## App run ## -------------------------------------
 if __name__ == "__main__":
     app.run(debug=True)
+    sched.start()
     db.create_all()
