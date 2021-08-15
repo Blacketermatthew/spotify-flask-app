@@ -64,6 +64,23 @@ playlist_results = sp.user_playlist_tracks(user=username, playlist_id=discover_p
 tracks = playlist_results['items']
 
 
+def create_database():
+    try:
+        command = """
+            CREATE DATABASE 'Spotify_DB'
+            """
+        cursor = db.cursor()
+        cursor.execute(command)
+        db.commit()
+    except:
+        print(f"Database already exists")
+        db.rollback()
+    finally:
+        # closing database connection.
+        if db:
+            cursor.close()
+            print("PostgreSQL connection is closed (create_db)\n")
+
 
 class Playlist:
 
@@ -154,7 +171,6 @@ class Playlist:
 
 
 
-discover_weekly = Playlist("Discover Weekly")
 
 
 

@@ -1,9 +1,10 @@
 from flask import Flask, render_template, url_for
-from application.spotify_requests import discover_weekly
+from application.spotify_requests import Playlist, create_database
 import psycopg2
 from application import app, db
 from scheduler import sched
 
+discover_weekly = Playlist("Discover Weekly")
 
 ## Routes ## --------------------------------------
 @app.route("/")
@@ -36,6 +37,7 @@ def three():
 
 ## App run ## -------------------------------------
 if __name__ == "__main__":
-    app.run(debug=True)
-    sched.start()
+    # sched.start()
+    create_database()
     db.create_all()
+    app.run(debug=True)

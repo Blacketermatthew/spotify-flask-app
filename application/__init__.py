@@ -18,13 +18,18 @@ if os.environ.get("IS_HEROKU"):
 elif os.getenv("IS_DEV"):
     db_username = os.getenv("PSQL_USERNAME")
     db_password = os.getenv("PSQL_PASSWORD")
+
     # Connecting to the existing local CRC_DB database
-    db = psycopg2.connect(
-        database="CRC_DB",
-        user=db_username,
-        password=db_password,
-        host="localhost",
-        port="5432")
+    try:
+        db = psycopg2.connect(
+            database="CRC_DB",
+            user=db_username,
+            password=db_password,
+            host="localhost",
+            port="5432")
+    except:
+        print("dev db connect fail")
+
 else:
     print("CONFIG ERROR")
 
