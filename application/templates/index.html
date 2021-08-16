@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 
+
 {% block head %}
 
     <title>Spotify Missed Connections</title>
@@ -9,10 +10,15 @@
 
 {% block body %}
 
-<h1 class="maintext">Here are some songs you might've missed:</h1>
 
 <div class="db-list">
+
+    <!-- Main Text-->
+    <h1 class="maintext">Here are some songs you might've missed:</h1>
+    <h5 style="text-align: center;">Total Count: {{ number_of_tracks }}</h5>
+
     <table>
+
         <thead>
             <tr class="head-row">
                 <th>Artist</th>
@@ -21,34 +27,40 @@
             </tr>
         </thead>
 
-        {% for track in total_tracks %}
-        <!-- Spotify URL -->
-
-            <tr>
-                <a href={{ track[4] }}>
-                <td>
-                    <!-- Artist -->
-                    {{ track[0] }}
-                </td>
-
-                <td>
-                    <!-- title -->
-                    {{ track[1] }}
-                </td>
-
-                <td>
-                    <!-- Album -->
-                    {{ track[2] }}
-                </td>
-                </a>
-            </tr>
         
-        
-        {% endfor %}
+        {% if total_tracks %}
+        <tbody>
+            {% for track in total_tracks %}
 
+                <tr class="clickable-row" onclick="openInNewTab('{{ track[4] }}');">  <!-- Opens track URL in new tab -->
+                    <script>
+                        function openInNewTab(url) {
+                            var win = window.open(url, '_blank');
+                            win.focus(); }
+                    </script>
+
+                    <td>
+                        <!-- Artist -->
+                        {{ track[1] }}
+                    </td>
+                    <td>
+                        <!-- Title -->
+                        {{ track[2] }}
+                    </td>
+                    <td>
+                        <!-- Album -->
+                        {{ track[3] }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+        </tbody>
     </table>
-</div>
 
+    {% endif %}
+
+</div>
 
 
 {% endblock %}

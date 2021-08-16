@@ -1,10 +1,10 @@
 from flask import Flask, render_template, url_for
-from application import app
-from application.spotify_requests import retrieve_track_info, insert_tracks
+from application.spotify_requests import Playlist, create_database
+import psycopg2
+from application import app, db
+from scheduler import sched
 
-port = 5000
-
-
+discover_weekly = Playlist("Discover Weekly")
 
 ## Routes ## --------------------------------------
 @app.route("/")
@@ -12,18 +12,18 @@ port = 5000
 @app.route('/home')
 def index():
 
-    total_tracks = retrieve_track_info()
+    # discover_weekly.weekly_scheduler()
+    total_tracks = discover_weekly.retrieve_track_info()
 
+    number_of_tracks = len(total_tracks)
     # for track in total_tracks:
     #     print(track[0])
 
-    return render_template('index.html', home=True, total_tracks=total_tracks)
+    return render_template('index.html', home=True, total_tracks=total_tracks, number_of_tracks=number_of_tracks)
 
-
-
-@app.route("/one")
-def one():
-    return render_template('index.html', one=True)
+@app.route("/highly_recommended")
+def highly_recommended():
+    return render_template('recommendations.html', rec_selected=True)
 
 @app.route("/two")
 def two():
@@ -35,11 +35,9 @@ def three():
 
 
 
-
-
-
-
 ## App run ## -------------------------------------
 if __name__ == "__main__":
-    app.run(debug=True, port=port)
-    
+    # sched.start()
+    create_database()
+    db.create_all()
+    app.run(debug=True)
