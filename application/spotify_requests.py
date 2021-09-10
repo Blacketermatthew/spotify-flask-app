@@ -7,7 +7,8 @@ import spotipy  # module for interacting with Spotify
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 import spotipy.util as util
 from datetime import datetime
-from application import app, db
+from application import app
+from application.models import db, SpotifyTracks
 
 ########## SCOPES ###########
 # You have to specify what you'd like to access through pre-defined scopes.
@@ -64,24 +65,24 @@ playlist_results = sp.user_playlist_tracks(user=username, playlist_id=discover_p
 tracks = playlist_results['items']
 
 
-def create_database():
-    try:
-        command = """
-            CREATE DATABASE 'Spotify_DB'
-            """
-        cursor = db.cursor()
-        cursor.execute(command)
-        db.commit()
-    except:
-        print(f"Database already exists")
-        db.rollback()
-    finally:
-        # closing database connection.
-        if db:
-            cursor.close()
-            print("PostgreSQL connection is closed (create_db)\n")
+# def create_database():
+#     try:
+#         command = """
+#             CREATE DATABASE 'Spotify_DB'
+#             """
+#         cursor = db.cursor()
+#         cursor.execute(command)
+#         db.commit()
+#     except:
+#         print(f"Database already exists")
+#         db.rollback()
+#     finally:
+#         # closing database connection.
+#         if db:
+#             cursor.close()
+#             print("PostgreSQL connection is closed (create_db)\n")
 
-
+'''
 class Playlist:
 
     def __init__(self, playlist_title):
@@ -169,7 +170,7 @@ class Playlist:
         # else:
         #     print(f"Current Time: {current_time}.  The playlist updates every Monday at noon.")
 
-
+'''
 
 
 

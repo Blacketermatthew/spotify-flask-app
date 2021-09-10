@@ -1,10 +1,11 @@
 from flask import Flask, render_template, url_for
-from application.spotify_requests import Playlist, create_database
-import psycopg2
-from application import app, db
-from scheduler import sched
+# from application.spotify_requests import Playlist
+# import psycopg2
+from application import app
+from application.models import db, SpotifyTracks
+# from scheduler import sched
 
-discover_weekly = Playlist("Discover Weekly")
+discover_weekly = SpotifyTracks
 
 ## Routes ## --------------------------------------
 @app.route("/")
@@ -12,8 +13,9 @@ discover_weekly = Playlist("Discover Weekly")
 @app.route('/home')
 def index():
 
+    # discover_weekly.reset_table()
     # discover_weekly.weekly_scheduler()
-    total_tracks = discover_weekly.retrieve_track_info()
+    total_tracks = SpotifyTracks.query.all()
 
     number_of_tracks = len(total_tracks)
     # for track in total_tracks:
@@ -25,9 +27,14 @@ def index():
 def highly_recommended():
     return render_template('recommendations.html', rec_selected=True)
 
-@app.route("/two")
-def two():
-    return render_template('index.html', two=True)
+@app.route("/testing", methods=['GET', 'POST'])
+def testing():
+
+    # SpotifyTracks.insert_new_tracks(SpotifyTracks)
+    
+    SpotifyTracks.select_all().keys()
+
+    return render_template('index.html', testing=True, number_of_tracks="TEST")
 
 @app.route("/three")
 def three():
@@ -38,6 +45,7 @@ def three():
 ## App run ## -------------------------------------
 if __name__ == "__main__":
     # sched.start()
-    create_database()
-    db.create_all()
+    # create_database()
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)

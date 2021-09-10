@@ -32,7 +32,7 @@
         <tbody>
             {% for track in total_tracks %}
 
-                <tr class="clickable-row" onclick="openInNewTab('{{ track[4] }}');">  <!-- Opens track URL in new tab -->
+                <tr class="clickable-row" onclick="openInNewTab('{{ track.URL }}');">  <!-- Opens track URL in new tab -->
                     <script>
                         function openInNewTab(url) {
                             var win = window.open(url, '_blank');
@@ -41,19 +41,19 @@
 
                     <td>
                         <!-- Artist -->
-                        {{ track[1] }}
+                        {{ track.Artist }}
                     </td>
                     <td>
                         <!-- Title -->
-                        {{ track[2] }}
+                        {{ track.Track }}
                     </td>
                     <td>
                         <!-- Album -->
-                        {{ track[3] }}
+                        {{ track.Album }}
                     </td>
 
                 </tr>
-
+   
             {% endfor %}
         </tbody>
     </table>
