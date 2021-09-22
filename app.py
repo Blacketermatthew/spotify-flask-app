@@ -3,7 +3,7 @@ from flask import Flask, render_template, url_for
 # import psycopg2
 from application import app
 from application.models import db, SpotifyTracks
-# from scheduler import sched
+from scheduler import sched
 
 discover_weekly = SpotifyTracks
 
@@ -23,18 +23,24 @@ def index():
 
     return render_template('index.html', home=True, total_tracks=total_tracks, number_of_tracks=number_of_tracks)
 
+
 @app.route("/highly_recommended")
 def highly_recommended():
     return render_template('recommendations.html', rec_selected=True)
 
+
 @app.route("/testing", methods=['GET', 'POST'])
 def testing():
 
-    # SpotifyTracks.insert_new_tracks(SpotifyTracks)
+    # SpotifyTracks.insert_new_tracks()
     
-    SpotifyTracks.select_all().keys()
+    total_tracks = SpotifyTracks.query.all()
 
-    return render_template('index.html', testing=True, number_of_tracks="TEST")
+    number_of_tracks = len(total_tracks)
+    # SpotifyTracks.select_all()
+
+    return render_template('index.html', testing=True, total_tracks=total_tracks, number_of_tracks=number_of_tracks)
+
 
 @app.route("/three")
 def three():
@@ -44,8 +50,6 @@ def three():
 
 ## App run ## -------------------------------------
 if __name__ == "__main__":
-    # sched.start()
-    # create_database()
     with app.app_context():
         db.create_all()
     app.run(debug=True)

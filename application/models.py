@@ -109,7 +109,7 @@ class SpotifyTracks(db.Model):
         db.session.execute("""TRUNCATE TABLE spotify_tracks RESTART IDENTITY;""")
         db.session.commit()
 
-    def insert_new_tracks(self):
+    def insert_new_tracks():
 
         # loops through each new song in the Discover Weekly playlist
         for i in range(len(tracks)):
@@ -152,10 +152,10 @@ class SpotifyTracks(db.Model):
             results = [
                 {
                     'Artist': row.Artist,      
-                    # 'Track': row.Track,                
-                    # 'Album': row.Album,        
-                    # 'SpotifyURI': row.SpotifyURI,                          
-                    # 'URL': row.URL
+                    'Track': row.Track,                
+                    'Album': row.Album,        
+                    'SpotifyURI': row.SpotifyURI,                          
+                    'URL': row.URL
                 } for row in table_query ]
 
 
