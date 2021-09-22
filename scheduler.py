@@ -1,4 +1,3 @@
-from pytz import HOUR
 from application.models import SpotifyTracks
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -11,3 +10,4 @@ def weekly_cronjob():
     SpotifyTracks.insert_new_tracks()
 
 sched.start()
+

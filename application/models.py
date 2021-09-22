@@ -76,14 +76,14 @@ class Playlist:
     SpotifyURI = db.Column(db.String(1000), nullable=False)
     URL = db.Column(db.String(2000), nullable=False)
 
-    def __init__(self, Artist, Track, Album, SpotifyURI, URL):
+    # def __init__(self, Artist, Track, Album, SpotifyURI, URL):
 
-        self.TrackID = TrackID
-        self.Artist = Artist
-        self.Track = Track
-        self.Album = Album
-        self.SpotifyURI = SpotifyURI
-        self.URL = URL
+    #     self.TrackID = TrackID
+    #     self.Artist = Artist
+    #     self.Track = Track
+    #     self.Album = Album
+    #     self.SpotifyURI = SpotifyURI
+    #     self.URL = URL
 
 class SpotifyTracks(db.Model):
     __tablename__ = "spotify_tracks"
@@ -97,13 +97,13 @@ class SpotifyTracks(db.Model):
     SpotifyURI = db.Column(db.String(1000), nullable=False)
     URL = db.Column(db.String(2000), nullable=False)
 
-    def __init__(self, Artist, Track, Album, SpotifyURI, URL):
+    # def __init__(self, Artist, Track, Album, SpotifyURI, URL):
 
-        self.Artist = Artist
-        self.Track = Track
-        self.Album = Album
-        self.SpotifyURI = SpotifyURI
-        self.URL = URL
+    #     self.Artist = Artist
+    #     self.Track = Track
+    #     self.Album = Album
+    #     self.SpotifyURI = SpotifyURI
+    #     self.URL = URL
 
     def reset_table():
         db.session.execute("""TRUNCATE TABLE spotify_tracks RESTART IDENTITY;""")
