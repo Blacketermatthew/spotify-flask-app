@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from sqlalchemy.sql.schema import Column
 from application import app
 import os
@@ -7,10 +8,12 @@ import spotipy  # module for interacting with Spotify
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 import spotipy.util as util
 from datetime import datetime
-import requests
+
 
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
 
 ########## SCOPES ###########
 # You have to specify what you'd like to access through pre-defined scopes.

@@ -1,7 +1,7 @@
 from flask import Flask
 from dotenv import load_dotenv
 from os import getenv, environ
-from sqlalchemy import create_engine
+# from sqlalchemy import create_engine
 
 
 
