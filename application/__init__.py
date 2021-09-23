@@ -1,7 +1,7 @@
 from flask import Flask
 from dotenv import load_dotenv
 from os import getenv, environ
-# import psycopg2
+from sqlalchemy import create_engine
 
 app = Flask(__name__)
 
@@ -21,6 +21,9 @@ app.config.update(
 )
 
 
+DB_URI = app.config['SQLALCHEMY_DATABASE_URI']
+engine = create_engine(DB_URI)
+
+
 # Necessary vvvv
 from application import app
-
