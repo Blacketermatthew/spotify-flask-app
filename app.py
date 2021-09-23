@@ -51,6 +51,7 @@ def three():
 ## App run ## -------------------------------------
 if __name__ == "__main__":
     with app.app_context():
-        db.create_all()
+        # db.create_all()
+        db.drop_all()
         db.session.commit()
     app.run(debug=True)
