@@ -18,13 +18,13 @@ elif getenv("IS_DEV"):
 
 app.config.update(
     SECRET_KEY=SECRET_KEY,
-    SQLALCHEMY_TRACK_MODIFICATIONS=False,
+    SQLALCHEMY_TRACK_MODIFICATIONS=True,
     SQLALCHEMY_DATABASE_URI=DATABASE_URI
 )
 
 
-DB_URI = app.config['SQLALCHEMY_DATABASE_URI']
-engine = create_engine(DB_URI)
+# DB_URI = app.config['SQLALCHEMY_DATABASE_URI']
+# engine = create_engine(DB_URI)
 
 
 # Necessary vvvv
