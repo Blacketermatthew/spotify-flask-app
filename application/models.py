@@ -3,6 +3,7 @@ from flask_migrate import Migrate
 from sqlalchemy.sql.schema import Column
 from application import app
 import os
+from os import getenv, environ
 from dotenv import load_dotenv
 import spotipy  # module for interacting with Spotify
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
@@ -32,31 +33,31 @@ load_dotenv()
 ### NOTE: CREATE A CLASS FOR THIS IN A SEPARATE FILE? #############
 
 # Used to configure the app when it's deployed to Heroku
-if os.environ.get("IS_HEROKU"):
+if environ.get("IS_HEROKU"):
     print("\nHEROKU")
-    client_id = os.environ.get("SPOTIPY_CLIENT_ID")
-    client_secret = os.environ.get("SPOITPY_CLIENT_SECRET")
-    discover_playlist_uri = os.environ.get("DISCOVER_WEEKLY_PLAYLIST")
-    starred_playlist_uri = os.environ.get("STARRED_PLAYLIST")
-    run_playlist_uri = os.environ.get("RUN_PLAYLIST")
-    party_playlist_uri = os.environ.get("PARTY_PLAYLIST")
-    username = os.environ.get("SPOTIFY_USERNAME")  # My Spotify "username"
-    db_username = os.environ.get("PSQL_USERNAME")
-    db_password = os.environ.get("PSQL_PASSWORD")
-    redirecturi = os.environ.get("REDIRECT_URI") # Spotify requires you to create a redirect_uri.  For now, it's localhost
+    client_id = environ.get("SPOTIPY_CLIENT_ID")
+    client_secret = environ.get("SPOITPY_CLIENT_SECRET")
+    discover_playlist_uri = environ.get("DISCOVER_WEEKLY_PLAYLIST")
+    starred_playlist_uri = environ.get("STARRED_PLAYLIST")
+    run_playlist_uri = environ.get("RUN_PLAYLIST")
+    party_playlist_uri = environ.get("PARTY_PLAYLIST")
+    username = environ.get("SPOTIFY_USERNAME")  # My Spotify "username"
+    db_username = environ.get("PSQL_USERNAME")
+    db_password = environ.get("PSQL_PASSWORD")
+    redirecturi = environ.get("REDIRECT_URI") # Spotify requires you to create a redirect_uri.  For now, it's localhost
 
 # Configures the app when it's ran locally and variables are pulled from .env
-elif os.getenv("IS_DEV"):
+elif getenv("IS_DEV"):
     print("\nLOCAL DEV")
-    client_id = os.getenv("SPOTIPY_CLIENT_ID")
-    client_secret = os.getenv("SPOITPY_CLIENT_SECRET")
-    discover_playlist_uri = os.getenv("DISCOVER_WEEKLY_PLAYLIST")
-    starred_playlist_uri = os.getenv("STARRED_PLAYLIST")
-    run_playlist_uri = os.getenv("RUN_PLAYLIST")
-    party_playlist_uri = os.getenv("PARTY_PLAYLIST")
-    username = os.getenv("SPOTIFY_USERNAME")  # My Spotify "username"
-    db_username = os.getenv("PSQL_USERNAME")
-    db_password = os.getenv("PSQL_PASSWORD")
+    client_id = getenv("SPOTIPY_CLIENT_ID")
+    client_secret = getenv("SPOITPY_CLIENT_SECRET")
+    discover_playlist_uri = getenv("DISCOVER_WEEKLY_PLAYLIST")
+    starred_playlist_uri = getenv("STARRED_PLAYLIST")
+    run_playlist_uri = getenv("RUN_PLAYLIST")
+    party_playlist_uri = getenv("PARTY_PLAYLIST")
+    username = getenv("SPOTIFY_USERNAME")  # My Spotify "username"
+    db_username = getenv("PSQL_USERNAME")
+    db_password = getenv("PSQL_PASSWORD")
     redirecturi = 'http://127.0.0.1:5000' # Spotify requires you to create a redirect_uri.  For now, it's localhost
 
 else:
@@ -115,13 +116,22 @@ class SpotifyTracks(db.Model):
     def insert_new_tracks():
 
         # loops through each new song in the Discover Weekly playlist
-        for i in range(len(tracks)):
+        for cnt, i in enumerate(range(len(tracks))):
             # (artist, title, album, URI, URL)
-            db.session.add(SpotifyTracks(Artist=tracks[i]['track']['artists'][0]['name'],             # Artist name
-                            Track=tracks[i]['track']['name'],                         # Song/track name
-                            Album=tracks[i]['track']['album']['name'],                # Album name
-                            SpotifyURI=tracks[i]['track']['uri'],                          # Song/track URI  (unique spotify-based ID)
-                            URL=tracks[i]['track']['external_urls']['spotify']))
+        
+            uri_list = [row.SpotifyURI for row in SpotifyTracks.query.all()]
+
+            if tracks[i]['track']['uri'] in uri_list:
+                print(f"Duplicate: {uri_list[cnt]} - {tracks[i]['track']['artists'][0]['name']}")
+                pass
+            else:
+                print(f"{tracks[i]['track']['name']} by {tracks[i]['track']['artists'][0]['name']} can be added")
+
+                db.session.add(SpotifyTracks(Artist=tracks[i]['track']['artists'][0]['name'],             # Artist name
+                                Track=tracks[i]['track']['name'],                         # Song/track name
+                                Album=tracks[i]['track']['album']['name'],                # Album name
+                                SpotifyURI=tracks[i]['track']['uri'],                          # Song/track URI  (unique spotify-based ID)
+                                URL=tracks[i]['track']['external_urls']['spotify']))
         db.session.commit()
 
 

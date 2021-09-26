@@ -2,9 +2,9 @@
     <div class="navbar">
 
         <a href="{{ url_for('index')}}" class="nav-link {% if home==True %}active{% endif %}">Home</a>
-        <a href="{{ url_for('highly_recommended')}}" class="nav-link highrec {% if rec_selected==True %}active{% endif %}">
-            Recommendations</a>
-        <a href="{{ url_for('testing')}}" class="nav-link {% if testing==True %}active{% endif %}">Test</a>
-        
+        <a href="{{ url_for('highly_recommended')}}" class="nav-link highrec {% if rec_selected==True %}active{% endif %}">Recommendations</a>
+        <a href="{{ url_for('add')}}" class="nav-link">Add Songs</a>
+        <a href="{{ url_for('testing')}}" class="nav-link">Test</a>
+
     </div>
 </header>
