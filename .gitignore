@@ -14,3 +14,4 @@ config.py
 .cache
 .cache*
 .circleci
+README.md

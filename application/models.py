@@ -133,16 +133,6 @@ class SpotifyTracks(db.Model):
                                 SpotifyURI=tracks[i]['track']['uri'],                          # Song/track URI  (unique spotify-based ID)
                                 URL=tracks[i]['track']['external_urls']['spotify']))
         db.session.commit()
-
-
-            # post_data = {'Artist': tracks[i]['track']['artists'][0]['name'],             # Artist name
-            #             'Track': tracks[i]['track']['name'],                         # Song/track name
-            #             'Album': tracks[i]['track']['album']['name'],                # Album name
-            #             'SpotifyURI': tracks[i]['track']['uri'],                          # Song/track URI  (unique spotify-based ID)
-            #             'URL': tracks[i]['track']['external_urls']['spotify']}
-            # requests.post('http://localhost:5000/', json=post_data)
-
-        # print(sql_values)
             
     def insert_a_track(self, Artist, Track, Album, SpotifyURI, URL):
         try:
