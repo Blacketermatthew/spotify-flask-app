@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, redirect
 # from application.spotify_requests import Playlist
 from application import app
 from application.models import db, SpotifyTracks
@@ -28,14 +28,26 @@ def testing():
     # discover_weekly.reset_table()
     # discover_weekly.weekly_scheduler()
 
-    SpotifyTracks.select_all()    
-    return render_template('index.html', testing=True, total_tracks=total_tracks, number_of_tracks=number_of_tracks)
+    SpotifyTracks.select_all()   
+    return redirect(url_for('index')) 
+    # return render_template('index.html', testing=True, total_tracks=total_tracks, number_of_tracks=number_of_tracks)
 
+# Recreates tables from models.py
+@app.route('/testing/createall', methods=['GET', 'POST', 'DELETE'])
+def test_create_all():
+    db.create_all()
+    return redirect(url_for('index'))
 
-@app.route("/add")
+# Deletes all tables from database
+@app.route('/testing/drop', methods=['GET', 'POST', 'DELETE'])
+def test_drop_metrics():
+    db.drop_all()
+    return redirect(url_for('index'))
+
+@app.route("/testing/add")
 def add():
     SpotifyTracks.insert_new_tracks()
-    return render_template('index.html', add=True, total_tracks=total_tracks, number_of_tracks=number_of_tracks)
+    return redirect(url_for('index'))
 
 
 ##################################################################################################
