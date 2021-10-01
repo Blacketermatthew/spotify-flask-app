@@ -1,4 +1,7 @@
-# Pre-requisite files
+# spotify-flask-app
 
-- PostgreSQL (required): https://www.postgresql.org/download/
-- pgAdmin 4 (optional): https://www.pgadmin.org/download/
+## Requirements:
+- Install PostgreSQL
+https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+
+- Install requirements.txt module
