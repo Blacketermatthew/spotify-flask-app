@@ -3,96 +3,118 @@
 
 html, body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: coral;
-    position: relative;
-    height: 100%;
-    margin: 0px;
+    /* background-color: coral; */
+    background-color: #363636;
+    /* position: relative; */
+    /* height: 100%; */
+    /* margin: 0px; */
 }
 
-header {
-    text-align: center;
-}
-
-
-/* --- Nav Bar --- */
 .navbar {
-    overflow: hidden;
-    background-color: #323135;
+    margin: 0;
+    /* margin-bottom: 3%; */
 }
 
-.navbar a {
-    color: #f0f0f0;
-    text-decoration: none;
-    text-align: center;
-    float: left;
-    font-size: 20px;
-    padding: 13px 25px;
-}
-
-.navbar a:hover {
-    background-color: #b1b1b1;
-    color: black;
-}
-
-.navbar a.active{
-    background-color: #178601;
-}
-
-a.highrec {
-    font-size: 20px;
+.nav-item {
+    padding: 0 25px;
+    margin: 0;
 }
 
 /* --- Main Text --- */
-
-h1.maintext, h5.maintext {
+.main-text {
     text-align: center;
     font-size: 55px;
     font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #c6f83b;
     text-shadow: 1px 1px 3px #301709;
+    margin: 2% 12%;
 }
 
+.count-text {
+    margin-top: 2%;
+    text-align: center;
+    color: #747474;
+}
 
 /* --- Track Database Table --- */
 
-table, th, td {
-    border: 1px solid black;
+td {
+    /* border-top: 1px solid black; */
+    border-bottom: 1px solid rgba(7, 75, 165, 0.562);
 }
 
-table {
-    background-color: #3e416d;
-    color: white;
-    overflow-y:scroll;
-    table-layout: fixed;
+.table-responsive {
+    padding: 0% 10%;
+}
+
+.table {
+    /* background-color: #737be9; */
+    /* background-color: #74bd78f6; */
+    /* background-color: #d3d3d3; */
+    overflow-y: scroll;
+    /* table-layout: fixed; */
     height:300px;
     display:block;
     border-collapse:collapse;
-    width: 75%;
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
+    scrollbar-color: #5f75a3f6 #b9b9b9f6;
+
   }
   
 .head-row th {
-    background-color: #18204b;
+    /* background-color: #15631a; */
+    background-color: #464646;
+    text-align: center;
     color: white;
-    padding: 5px 0px;
+    padding: 3px 0px;
     font-size: 25px;
     width: 500px;
     text-shadow: 3px 3px 3px #0b4d21;
     top: 0;
     position: sticky;
+    cursor: default;
 }
-
 
 
 tr:hover {
-    background-color: #e2f882;
-    color: black;
-    outline: none;
     cursor: pointer;
-  }
-
-  td {
-    padding: 10px 10px;
 }
+
+td {
+    padding: 10px 10px;
+    /* height: 100%; */
+}
+
+/* .deletecell {
+    padding: 0px 0px;
+
+} */
+/* 
+.deletecell a {
+    text-decoration: none;
+} */
+
+.fas .fa-times i {
+    background-color: #f44336;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;    
+}
+
+/* .deletecell td:hover {
+    background-color: #32355f;
+}
+
+.deletecell td:hover {
+    background-color: #484c88;
+} */
+
+
+/* .track_delete_btn {
+    height: 100%;
+    box-sizing: content-box;
+    padding: 0px;
+    border: medium none;
+    width: 100%; 
+} */

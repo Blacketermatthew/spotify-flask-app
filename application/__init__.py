@@ -16,7 +16,8 @@ elif getenv("IS_DEV"):
 app.config.update(
     SECRET_KEY=SECRET_KEY,
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
-    SQLALCHEMY_DATABASE_URI=DATABASE_URI
+    SQLALCHEMY_DATABASE_URI=DATABASE_URI,
+    SESSION_TYPE="sqlalchemy"
 )
 
 # Necessary vvvv

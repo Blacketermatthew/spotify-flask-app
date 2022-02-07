@@ -48,7 +48,7 @@ if environ.get("IS_HEROKU"):
 
 # Configures the app when it's ran locally and variables are pulled from .env
 elif getenv("IS_DEV"):
-    print("\nLOCAL DEV")
+    # print("\nLOCAL DEV")
     client_id = getenv("SPOTIPY_CLIENT_ID")
     client_secret = getenv("SPOITPY_CLIENT_SECRET")
     discover_playlist_uri = getenv("DISCOVER_WEEKLY_PLAYLIST")

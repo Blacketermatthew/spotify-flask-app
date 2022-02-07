@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect
+from flask import Flask, render_template, url_for, redirect, flash, session
 # from application.spotify_requests import Playlist
 from application import app
 from application.models import db, SpotifyTracks
@@ -15,6 +15,7 @@ number_of_tracks = len(total_tracks)
 @app.route("/index")
 @app.route('/home')
 def index():
+    # db.session.refresh(total_tracks)
     return render_template('index.html', home=True, total_tracks=total_tracks, number_of_tracks=number_of_tracks)
 
 
@@ -44,10 +45,21 @@ def test_drop_metrics():
     db.drop_all()
     return redirect(url_for('index'))
 
+@app.route('/testing/droptrack/<int:track_id>', methods=['POST'])
+def track_delete(track_id):
+    # track = SpotifyTracks.query.filter_by(TrackID=track_id).first()
+    track = SpotifyTracks.query.get_or_404(track_id)
+    if track:
+        db.session.delete(track)
+        db.session.commit()
+        flash('Item deleted.')
+    return redirect(url_for('index'))
+
 @app.route("/testing/add")
 def add():
     SpotifyTracks.insert_new_tracks()
     return redirect(url_for('index'))
+
 
 
 ##################################################################################################
