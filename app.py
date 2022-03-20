@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, redirect, flash, session
 # from application.spotify_requests import Playlist
 from application import app
 from application.models import db, SpotifyTracks
-from scheduler import sched
+# from scheduler import sched
 
 discover_weekly = SpotifyTracks
 total_tracks = SpotifyTracks.query.all()
@@ -47,7 +47,7 @@ def test_drop_metrics():
 
 @app.route('/testing/droptrack/<int:track_id>', methods=['POST'])
 def track_delete(track_id):
-    # track = SpotifyTracks.query.filter_by(TrackID=track_id).first()
+    # track = SpotifyTracks.query.filter_by(id=track_id).first()
     track = SpotifyTracks.query.get_or_404(track_id)
     if track:
         db.session.delete(track)
@@ -56,7 +56,7 @@ def track_delete(track_id):
     return redirect(url_for('index'))
 
 @app.route("/testing/add")
-def add():
+def add_songs():
     SpotifyTracks.insert_new_tracks()
     return redirect(url_for('index'))
 

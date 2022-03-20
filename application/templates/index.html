@@ -43,25 +43,20 @@
                     
                         <td class="trackcell">
                             <!-- Artist -->
-                            {{ track.Artist }}
+                            {{ track.ARTIST }}
                         </td>
 
                         <td class="trackcell">
                             <!-- Title -->
-                            {{ track.Track }}
+                            {{ track.TRACK }}
                         </td>
 
                         <td class="trackcell">
                             <!-- Album -->
-                            {{ track.Album }}
+                            {{ track.ALBUM }}
                         </td>
 
-                        <!-- <td class="deletecell">
-                            <a href="{{ url_for('track_delete', track_id=track.TrackID) }}"
-                            onclick="return confirm('Do you want to permanently delete this track ?');" title="Delete Track">
-                            <i class="fas fa-times"></i></a>
-                        </td> -->
-
+                      
                         
 
                     
@@ -82,7 +77,4 @@
 
 {% endblock %}
 
-                        <!-- <form action="{{ url_for('test_drop_metric_by_id') }}" method=post>
-                            <input type=hidden value="{{ track.TrackID }}" name=track_to_delete />
-                            <input type=submit />
-                          </form> -->
+                    

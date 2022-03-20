@@ -1,6 +1,6 @@
 # Directories
 __pycache__/
-
+spotify_venv/
 
 # env files
 .flaskenv
