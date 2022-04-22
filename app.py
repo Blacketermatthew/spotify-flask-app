@@ -8,6 +8,7 @@ discover_weekly = SpotifyTracks
 total_tracks = SpotifyTracks.query.all()
 number_of_tracks = len(total_tracks)
 
+
 ##################################################################################################
 ##### Routes ###### -----------------------------------------------------------------------
 ###################################################################################
@@ -33,11 +34,13 @@ def testing():
     return redirect(url_for('index')) 
     # return render_template('index.html', testing=True, total_tracks=total_tracks, number_of_tracks=number_of_tracks)
 
+
 # Recreates tables from models.py
 @app.route('/testing/createall', methods=['GET', 'POST', 'DELETE'])
 def test_create_all():
     db.create_all()
     return redirect(url_for('index'))
+
 
 # Deletes all tables from database
 @app.route('/testing/drop', methods=['GET', 'POST', 'DELETE'])
@@ -45,20 +48,28 @@ def test_drop_metrics():
     db.drop_all()
     return redirect(url_for('index'))
 
-@app.route('/testing/droptrack/<int:track_id>', methods=['POST'])
-def track_delete(track_id):
-    # track = SpotifyTracks.query.filter_by(id=track_id).first()
-    track = SpotifyTracks.query.get_or_404(track_id)
-    if track:
-        db.session.delete(track)
-        db.session.commit()
-        flash('Item deleted.')
+
+@app.route('/testing/add_a_song', methods=['GET', 'DELETE'])
+def add_a_song():
     return redirect(url_for('index'))
+
 
 @app.route("/testing/add")
 def add_songs():
     SpotifyTracks.insert_new_tracks()
     return redirect(url_for('index'))
+
+
+# @app.route('/testing/droptrack/<int:track_id>', methods=['POST'])
+# def track_delete(track_id):
+#     track = SpotifyTracks.query.get_or_404(track_id)
+#     if track:
+#         db.session.delete(track)
+#         db.session.commit()
+#         flash(f'{SpotifyTracks[track]} deleted.')
+
+#     return redirect(url_for('index'))
+
 
 
 

@@ -127,12 +127,15 @@ class SpotifyTracks(db.Model):
             else:
                 print(f"{tracks[track]['track']['name']} by {tracks[track]['track']['artists'][0]['name']} can be added")
 
-                db.session.add(SpotifyTracks(Artist=tracks[track]['track']['artists'][0]['name'],             # Artist name
-                                Track=tracks[track]['track']['name'],                         # Song/track name
-                                Album=tracks[track]['track']['album']['name'],                # Album name
-                                URI=tracks[track]['track']['uri'],                          # Song/track URI  (unique spotify-based ID)
-                                URL=tracks[track]['track']['external_urls']['spotify']))
-        db.session.commit()
+                try:
+                    db.session.add(SpotifyTracks(Artist=tracks[track]['track']['artists'][0]['name'],             # Artist name
+                                    Track=tracks[track]['track']['name'],                         # Song/track name
+                                    Album=tracks[track]['track']['album']['name'],                # Album name
+                                    URI=tracks[track]['track']['uri'],                          # Song/track URI  (unique spotify-based ID)
+                                    URL=tracks[track]['track']['external_urls']['spotify']))
+                except Exception as e:
+                    print(f"Database add error: {e}")
+                db.session.commit()
             
     def insert_a_track(self, Artist, Track, Album, URI, URL):
         try:
